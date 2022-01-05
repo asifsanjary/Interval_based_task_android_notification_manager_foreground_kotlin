@@ -1,7 +1,7 @@
 # Interval-based Task on Foreground Service
 
 - Using count-down timer on Foreground Service.
-- Mainly useful for small interval-based work where interval is less than 15 minutes.
+- Mainly useful for small interval-based work where interval is less than 15 minutes and app needs to stay in Foreground
 - Otherwise it's better to use WorkManager with Foreground Service.
 
 Improvements
