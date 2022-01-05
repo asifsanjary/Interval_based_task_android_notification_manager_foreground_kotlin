@@ -14,6 +14,10 @@ import androidx.annotation.RequiresApi
 
 class IntervalBasedService : Service() {
 
+    private var timer: CountDownTimer? = null
+    private var isTimerStopped: Boolean = false
+
+
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
         Log.d(TAG, "[Started] Interval-Based Service")
 
@@ -27,7 +31,7 @@ class IntervalBasedService : Service() {
     private fun startIntervalBasedWork(service: Service, serviceId: Int) {
         // Implement your own CountDownTimer for better usability
 
-        val timer = object : CountDownTimer(TOTAL_TIME_REQUIRED_MLS, TIME_INTERVAL_MLS) {
+        timer = object : CountDownTimer(TOTAL_TIME_REQUIRED_MLS, TIME_INTERVAL_MLS) {
             override fun onTick(millisUntilFinished: Long) {
                 Log.d(TAG, "${millisUntilFinished / 1000} seconds remaining")
                 // TODO: Do timer based work
@@ -35,8 +39,10 @@ class IntervalBasedService : Service() {
 
             override fun onFinish() {
                 Log.d(TAG, "Timer Finished")
+                isTimerStopped = true
+
                 Log.d(TAG, "Service Stopping")
-                service?.let {
+                service.let {
                     it.stopForeground(true)
                     it.stopSelf(serviceId)
                 }
@@ -44,7 +50,8 @@ class IntervalBasedService : Service() {
 
         }
 
-        timer.start()
+        isTimerStopped = false
+        (timer as CountDownTimer).start()
     }
 
     private fun createNotification(): Notification {
@@ -74,6 +81,7 @@ class IntervalBasedService : Service() {
     }
 
     override fun onDestroy() {
+        if (!isTimerStopped) (timer as CountDownTimer).cancel()
         Log.d(TAG, "Service Stop")
     }
 
