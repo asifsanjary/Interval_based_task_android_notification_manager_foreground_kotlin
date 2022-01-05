@@ -6,7 +6,7 @@
 
 Improvements
 - What if service is stopped in the middle of the Count-down Timer, as Count-down Timer uses it's own `handler`, maybe it's better to make a custom Count-down Timer with a reference to `handler`, so that it can be stopped when service stops
-- There may be other improvements, let me know
+- There may be other improvements, let me know here
 
 References:
 - https://developer.android.com/guide/components/services
