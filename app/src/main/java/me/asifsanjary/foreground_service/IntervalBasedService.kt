@@ -23,14 +23,15 @@ class IntervalBasedService : Service() {
 
         startForeground(NOTIFICATION_ID, createNotification())
 
-        startIntervalBasedWork(this, startId)
+        startIntervalBasedWork()
         // If we get killed, after returning from here, restart
         return START_STICKY
     }
 
-    private fun startIntervalBasedWork(service: Service, serviceId: Int) {
+    private fun startIntervalBasedWork() {
         // Implement your own CountDownTimer for better usability
 
+        //TODO: move it to onCreate()
         timer = object : CountDownTimer(TOTAL_TIME_REQUIRED_MLS, TIME_INTERVAL_MLS) {
             override fun onTick(millisUntilFinished: Long) {
                 Log.d(TAG, "${millisUntilFinished / 1000} seconds remaining")
@@ -42,10 +43,8 @@ class IntervalBasedService : Service() {
                 isTimerStopped = true
 
                 Log.d(TAG, "Service Stopping")
-                service.let {
-                    it.stopForeground(true)
-                    it.stopSelf(serviceId)
-                }
+                stopForeground(true)
+                stopSelf()
             }
 
         }
